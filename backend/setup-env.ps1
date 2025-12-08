@@ -1,0 +1,56 @@
+# PowerShell script to set up .env file with Firebase credentials
+# Run this script: .\setup-env.ps1
+
+$privateKey = @"
+-----BEGIN PRIVATE KEY-----
+MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCtdd/d8k/54WEL
+Y0Lefu7BM9Pg6WgXLv3mdjYkqy50GmFnZZmj+8xMQ0za8bDGjsY0XsTGfEqgdOod
+Lu9isZ3o9SVw6KaOgZLKcvI4bk6XcgpaQYb/ScbCj3SMv8Mv8zhW8CkugoH5qF9K
+fYJPbXuxNiEmfejnbJpLunu5B+tSc/u/8lFCJzaUjlUd05PgyxcaKGJYuiUo8jJu
+eWj0jEKUQy0tVCrSFzTXR/IxSn+BkdF4yTlRb7nqRKRIiGO/IeNCoQdTqSvBB9a0
+b5kp+E24pKDJDnXcNhnqNc7Sx3xK3tWl+bMZD/dra9vRGBzxrtWNJLe2MCeHAR5W
+8XfLIQQZAgMBAAECggEADxIUtzXcWPuJ8PFY1/fzSnn0SLA+yPTePm262oi86n14
+RQGAzcyMvXuDa+pfz4CMG/S35/7YhQRjatGvHsYL0DesXxj3j54WYNyHyvtafLH9
+0EWtMvT3/eN03t2yWbIqDPOkwFO6czR7wv8QmVIL0yO+0ZdS6vh2l2nGYhccDPe+
+HPyMmNWY0RY/PM312irPcvPSO7EFyrm5cJ5xeRZhpfB5X7EWlB8FpdA2DDRko5de
+GCJ0ZFxy6gk3KpoShDNuHom7JdpVhaPEOsxoiMQjcbE8616ysX8l671ru3QYf6e9
+UOFCgulEX/ZwQdIwdnF/ryWr7DUWt3cA48UClUnGuQKBgQDa1RQfHEEidAlDjSDm
+CKDw3Trz4CvWgfqMkkCRZkUSjz0YlU//7IKUn+qwz1D4XToxnbvcP4qA2dBaFACc
+LcyBNLOdgR00OUjWawhuFuhOnjyhC/n4woL5BPLP2wpXParoq9smcmGXZCqReFcY
+GQgO8i4vyZzcDssoDfjigC+YSwKBgQDK7AHSl3U+5dg6s3FeQplljUIVBfE92UED
+uHB/dL9gYbmXDyNygg7WIVclqz0y+nCL03lsOsVVi/9XQG8XZ1f57exCL9D2itXY
+smZjlLIcg6vFQ4bF7Rte/WPAEywEbA6QyDAzcYyB9mdQ/TI25yFUeANuZHtstvyq
+5eJyewieqwKBgQCGJ1Szkc24gmxfdjhx7V5E60tF0OrvETX5UXu153122Es7M+Yc
+XfDbjoIBLMdVy0luu2U8q9OMFHvvjQ2msUkK+LUYXNv7dRbbJDjBzNdTwxwmGsJ/
+JzfF06vLk1vuicap5xlto3eCqQyTq7Ow+T+AciWwdCfunD8dahtnN/B1qwKBgQDK
+bS7QRtjmOuE+hb1lG6jsnkK6uCfU3AI4VOicrPkwi6xZHffthgKI58+Iu08cqKpX
+QknRhrtOQI8jGhr4TNZ9czQJPqwFFbCIMEdltXMMcOmMqnUqwwJX+wxkEnwJmUXa
+dmlnGDHjf8vHBh3umRktq18447IgXFanoRYJv+R0awKBgQCG/Q58fTg2gbZkOmhz
+W0taXupH8GT4a7aJCeNEGGeAlnYCsOhE5KyfQxK5/altNzSrvwYaAdZwBIdVHjB3
+OX6SndfvFWnObDBGYim2O81t2w2khjwI615FHxeSTnbZlHLpcJSB6NKJxtysn5kr
+X+dyDZmt7Px3HvbuF9uS/uWfsg==
+-----END PRIVATE KEY-----
+"@
+
+$envContent = @"
+PORT=3000
+NODE_ENV=development
+
+FIREBASE_PROJECT_ID=hostelhive-5edc1
+FIREBASE_PRIVATE_KEY_ID=521852a01fdccaf7d8227be7f5b4400b2eb3df68
+FIREBASE_PRIVATE_KEY="$privateKey"
+FIREBASE_CLIENT_EMAIL=firebase-adminsdk-fbsvc@hostelhive-5edc1.iam.gserviceaccount.com
+FIREBASE_CLIENT_ID=107346301030911203414
+FIREBASE_AUTH_URI=https://accounts.google.com/o/oauth2/auth
+FIREBASE_TOKEN_URI=https://oauth2.googleapis.com/token
+FIREBASE_AUTH_PROVIDER_X509_CERT_URL=https://www.googleapis.com/oauth2/v1/certs
+FIREBASE_CLIENT_X509_CERT_URL=https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40hostelhive-5edc1.iam.gserviceaccount.com
+FIREBASE_STORAGE_BUCKET=hostelhive-5edc1.appspot.com
+
+APP_NAME=HostelHelp
+APP_VERSION=1.0.0
+"@
+
+$envContent | Out-File -FilePath ".env" -Encoding utf8
+Write-Host "✅ .env file created successfully!"
+

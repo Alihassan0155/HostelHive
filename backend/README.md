@@ -1,6 +1,6 @@
-# HostelHive
+# HostelHelp Backend API
 
-HostelHelp - A comprehensive hostel maintenance management system.
+Backend API for HostelHelp - A comprehensive hostel maintenance management system.
 
 ## Features
 
@@ -14,94 +14,29 @@ HostelHelp - A comprehensive hostel maintenance management system.
 
 ## Tech Stack
 
-### Backend
 - Node.js + Express
 - Firebase Admin SDK (Firestore)
 - Express Validator
 - CORS, Helmet, Morgan
 
-### Frontend
-- React + Vite
-- React Router
-- Tailwind CSS
-- Axios
-- Firebase Client SDK
-
-## Project Structure
-
-```
-HostelHive/
-├── backend/
-│   ├── src/
-│   │   ├── config/
-│   │   ├── controllers/
-│   │   ├── middleware/
-│   │   ├── models/
-│   │   ├── routes/
-│   │   ├── services/
-│   │   ├── utils/
-│   │   └── server.js
-│   ├── .env.example
-│   ├── package.json
-│   └── README.md
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── config/
-│   │   ├── context/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   ├── utils/
-│   │   └── App.jsx
-│   ├── package.json
-│   └── vite.config.js
-└── README.md
-```
-
 ## Installation
 
-### Backend Setup
-
-1. Navigate to backend directory:
-```bash
-cd backend
-```
-
-2. Install dependencies:
+1. Install dependencies:
 ```bash
 npm install
 ```
 
-3. Copy `.env.example` to `.env` and fill in your Firebase credentials:
+2. Copy `.env.example` to `.env` and fill in your Firebase credentials:
 ```bash
 cp .env.example .env
 ```
 
-4. Download your Firebase service account key and place it in the backend directory, or configure environment variables.
+3. Download your Firebase service account key and place it in the project root, or configure environment variables.
 
-5. Start the server:
+4. Start the server:
 ```bash
 npm run dev  # Development mode
 npm start    # Production mode
-```
-
-### Frontend Setup
-
-1. Navigate to frontend directory:
-```bash
-cd frontend
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Configure Firebase (see `frontend/GET_FIREBASE_CONFIG.md`)
-
-4. Start the development server:
-```bash
-npm run dev
 ```
 
 ## API Endpoints
@@ -151,6 +86,26 @@ npm run dev
 - `PUT /api/notifications/:id/read` - Mark notification as read
 - `DELETE /api/notifications/:id` - Delete notification
 
+## Project Structure
+
+```
+backend/
+├── src/
+│   ├── config/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── services/
+│   ├── utils/
+│   └── server.js
+├── .env.example
+├── .gitignore
+├── package.json
+└── README.md
+```
+
 ## License
 
 ISC
+
