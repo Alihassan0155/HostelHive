@@ -1,7 +1,7 @@
 // src/pages/Admin/Dashboard.jsx
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaUsers, FaBuilding, FaClipboardList, FaExclamationTriangle, FaCheckCircle, FaClock } from "react-icons/fa";
 import Header from "../../components/UI/Header";
 import Card from "../../components/UI/Card";
@@ -11,6 +11,7 @@ import IssueCard from "../../components/Issue/IssueCard";
 import issueService from "../../services/issueService";
 import adminService from "../../services/adminService";
 import { useAuth } from "../../context/AuthContext";
+import { HostelNameDisplay } from "../../components/UI/NameDisplay";
 
 const statsVariant = {
   hidden: { opacity: 0, y: 8 },
@@ -19,6 +20,7 @@ const statsVariant = {
 
 const AdminDashboard = () => {
   const { userData } = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [issues, setIssues] = useState([]);
   const [pendingIssues, setPendingIssues] = useState([]);
@@ -99,7 +101,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 p-6">
-      <Header title="Admin Dashboard" />
+      <Header title="Admin Dashboard" showBackButton={false} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <motion.div variants={statsVariant} initial="hidden" animate="show" custom={1}>
@@ -191,9 +193,11 @@ const AdminDashboard = () => {
             ) : (
               <div className="space-y-3">
                 {issues.map((issue) => (
-                  <Link key={issue.id} to={`/admin/issue/${issue.id}`}>
-                    <IssueCard issue={issue} />
-                  </Link>
+                  <IssueCard 
+                    key={issue.id} 
+                    issue={issue}
+                    onClick={(issue) => navigate(`/admin/issue/${issue.id}`)}
+                  />
                 ))}
               </div>
             )}
@@ -207,9 +211,11 @@ const AdminDashboard = () => {
               </div>
               <div className="space-y-3">
                 {pendingIssues.map((issue) => (
-                  <Link key={issue.id} to={`/admin/issue/${issue.id}`}>
-                    <IssueCard issue={issue} />
-                  </Link>
+                  <IssueCard 
+                    key={issue.id} 
+                    issue={issue}
+                    onClick={(issue) => navigate(`/admin/issue/${issue.id}`)}
+                  />
                 ))}
               </div>
             </Card>
@@ -240,7 +246,7 @@ const AdminDashboard = () => {
             <div className="space-y-2 text-sm">
               <div>
                 <span className="text-gray-600">Managed Hostel:</span>
-                <span className="font-medium text-gray-800 ml-2">{userData?.hostelId || "—"}</span>
+                <HostelNameDisplay hostelId={userData?.hostelId} fallback="—" />
               </div>
               <div>
                 <span className="text-gray-600">Email:</span>

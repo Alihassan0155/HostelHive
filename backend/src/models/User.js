@@ -33,6 +33,8 @@ export class User {
       this.availability = data.availability || {};
       this.isAvailable =
         data.isAvailable !== undefined ? data.isAvailable : true;
+      this.noOfRatings = data.noOfRatings || 0; // Total number of ratings received
+      this.rating = data.rating || 0; // Average rating (0-5)
     }
   }
 
@@ -94,6 +96,13 @@ export class User {
           errors.push(`Invalid skills: ${invalidSkills.join(", ")}`);
         }
       }
+      // Validate rating if provided
+      if (data.rating !== undefined && (data.rating < 0 || data.rating > 5)) {
+        errors.push("Rating must be between 0 and 5");
+      }
+      if (data.noOfRatings !== undefined && data.noOfRatings < 0) {
+        errors.push("Number of ratings cannot be negative");
+      }
     }
 
     return {
@@ -132,6 +141,8 @@ export class User {
       doc.hostels = this.hostels;
       doc.availability = this.availability;
       doc.isAvailable = this.isAvailable;
+      doc.noOfRatings = this.noOfRatings || 0;
+      doc.rating = this.rating || 0;
     }
 
     return doc;

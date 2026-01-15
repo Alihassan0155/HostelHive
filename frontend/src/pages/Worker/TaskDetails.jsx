@@ -6,6 +6,7 @@ import Card from "../../components/UI/Card";
 import Loader from "../../components/UI/Loader";
 import DateDisplay from "../../components/UI/DateDisplay";
 import issueService from "../../services/issueService";
+import { useUserName } from "../../hooks/useNameResolver";
 
 const statusColor = (status) => {
   switch (status) {
@@ -32,6 +33,7 @@ const TaskDetails = () => {
   const [task, setTask] = useState(null);
   const [updateNotes, setUpdateNotes] = useState("");
   const [newStatus, setNewStatus] = useState("");
+  const { userName: studentName, loading: loadingStudentName } = useUserName(task?.studentId);
 
   useEffect(() => {
     loadTask();
@@ -177,7 +179,9 @@ const TaskDetails = () => {
                 {task.studentId && (
                   <div className="flex justify-between">
                     <span className="text-gray-600">Reported by:</span>
-                    <span className="font-medium text-gray-800">Student {task.studentId.substring(0, 8)}</span>
+                    <span className="font-medium text-gray-800">
+                      {loadingStudentName ? 'Loading...' : (studentName || `Student ${task.studentId.substring(0, 8)}`)}
+                    </span>
                   </div>
                 )}
               </div>

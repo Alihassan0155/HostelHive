@@ -52,7 +52,7 @@ const MyIssues = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-purple-100 p-6">
-      <Header title="My Reported Issues" />
+      <Header title="My Reported Issues" backTo="/student/dashboard" />
 
       <div className="max-w-6xl mx-auto">
         <Card className="mb-6">

@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 // const firebaseConfig = {
 //   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -56,6 +57,16 @@ try {
   auth = getAuth(app);
 }
 
-export { auth };
+// Initialize Firestore
+let db;
+try {
+  db = getFirestore(app);
+  console.log('✅ Firestore initialized successfully');
+} catch (error) {
+  console.error('❌ Firestore initialization error:', error);
+  throw error;
+}
+
+export { auth, db };
 export default app;
 

@@ -157,10 +157,21 @@ export class IssueService {
     };
     if (scheduledTime) updateData.scheduledTime = scheduledTime;
     await this.updateIssue(issueId, updateData);
+    // Fetch hostel name for notification
+    const { HostelService } = await import('./hostelService.js');
+    let hostelName = issue.hostelId;
+    try {
+      const hostel = await HostelService.getHostelById(issue.hostelId);
+      hostelName = hostel.name || issue.hostelId;
+    } catch (error) {
+      console.error('Error fetching hostel name for notification:', error);
+      // Fallback to ID if fetch fails
+    }
+    
     await NotificationService.createNotification({
       userId: workerId,
       type: 'issue_assigned',
-      message: `New ${issue.urgency} ${issue.type} job assigned: ${issue.title} at ${issue.hostelId}`,
+      message: `New ${issue.urgency} ${issue.type} job assigned: ${issue.title} at ${hostelName}`,
       relatedIssueId: issueId,
     });
     await NotificationService.createNotification({
@@ -210,13 +221,26 @@ export class IssueService {
         });
       }
     } else if (status === ISSUE_STATUS.COMPLETED) {
+      // Notify student
       await NotificationService.createNotification({
         userId: issue.studentId,
         type: 'work_completed',
-        message: 'Worker has completed the job. Please confirm if the issue is fixed.',
+        message: 'Worker has completed the job. Please rate the service.',
         relatedIssueId: issueId,
         relatedWorkerId: issue.assignedWorkerId,
       });
+      
+      // Notify admin
+      const hostel = await db.collection(COLLECTIONS.HOSTELS).doc(issue.hostelId).get();
+      if (hostel.exists && hostel.data().adminId) {
+        await NotificationService.createNotification({
+          userId: hostel.data().adminId,
+          type: 'work_completed',
+          message: `Work has been completed on issue: ${issue.title}`,
+          relatedIssueId: issueId,
+          relatedWorkerId: issue.assignedWorkerId,
+        });
+      }
     }
     return this.getIssueById(issueId);
   }

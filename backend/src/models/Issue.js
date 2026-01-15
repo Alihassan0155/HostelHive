@@ -19,6 +19,7 @@ export class Issue {
     this.completedAt = data.completedAt || null;
     this.workerNotes = data.workerNotes || null;
     this.workerPhotos = data.workerPhotos || [];
+    this.ratedAt = data.ratedAt || null; // When the rating was given (for quick lookup)
   }
 
   static validate(data) {
@@ -50,6 +51,7 @@ export class Issue {
       completedAt: this.completedAt,
       workerNotes: this.workerNotes,
       workerPhotos: this.workerPhotos,
+      ratedAt: this.ratedAt,
     };
   }
 

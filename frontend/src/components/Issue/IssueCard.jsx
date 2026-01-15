@@ -2,6 +2,9 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { MessageCircle } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
+import { useUnreadMessages } from "../../hooks/useUnreadMessages";
 import DateDisplay from "../UI/DateDisplay";
 
 const statusColor = (status) => {
@@ -21,13 +24,39 @@ const formatType = (type) => {
   return type.charAt(0).toUpperCase() + type.slice(1);
 };
 
-const IssueCard = ({ issue }) => {
+const IssueCard = ({ issue, onClick }) => {
+  const { userData } = useAuth();
+  const unreadCount = useUnreadMessages(issue.id);
+  
+  // Check if user can access chat - only show when worker is assigned
+  // For students: can chat only if they own the issue AND a worker is assigned
+  // For workers: can chat only if they are the assigned worker
+  const canChat = 
+    (userData?.role === 'student' && 
+     issue.studentId === (userData?.id || userData?.uid) && 
+     issue.assignedWorkerId) ||
+    (userData?.role === 'worker' && 
+     issue.assignedWorkerId === (userData?.id || userData?.uid));
+
+  const handleCardClick = (e) => {
+    // Don't navigate if clicking on chat link
+    if (e.target.closest('a')) {
+      return;
+    }
+    if (onClick) {
+      onClick(issue);
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.28 }}
-      className="p-4 rounded-lg border border-gray-200 bg-white hover:shadow-md transition-shadow"
+      onClick={handleCardClick}
+      className={`p-4 rounded-lg border border-gray-200 bg-white hover:shadow-md transition-shadow ${
+        onClick ? 'cursor-pointer' : ''
+      }`}
     >
       <div className="flex items-start gap-4">
         <div className="flex-1">
@@ -52,6 +81,24 @@ const IssueCard = ({ issue }) => {
             <div>
               Reported: <DateDisplay timestamp={issue.createdAt} variant="datetime" showIcon={false} className="inline font-medium text-gray-700 ml-1" />
             </div>
+            {canChat && (
+              <Link
+                to={`/chat/issue/${issue.id}`}
+                className="relative flex items-center gap-1 text-blue-600 hover:text-blue-700 font-medium transition-colors"
+              >
+                <MessageCircle size={16} />
+                <span>Chat</span>
+                {unreadCount > 0 && (
+                  <motion.span
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-lg"
+                  >
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </motion.span>
+                )}
+              </Link>
+            )}
           </div>
         </div>
 

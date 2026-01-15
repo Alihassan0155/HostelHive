@@ -71,7 +71,7 @@ const WorkerDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 p-6">
-      <Header title="Worker Dashboard" />
+      <Header title="Worker Dashboard" showBackButton={false} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <motion.div variants={statsVariant} initial="hidden" animate="show" custom={1}>

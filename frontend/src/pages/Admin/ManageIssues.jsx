@@ -1,6 +1,6 @@
 // src/pages/Admin/ManageIssues.jsx
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Header from "../../components/UI/Header";
 import Card from "../../components/UI/Card";
 import Loader from "../../components/UI/Loader";
@@ -8,6 +8,7 @@ import IssueCard from "../../components/Issue/IssueCard";
 import issueService from "../../services/issueService";
 
 const ManageIssues = () => {
+  const navigate = useNavigate();
   const [issues, setIssues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
@@ -114,9 +115,11 @@ const ManageIssues = () => {
         ) : (
           <div className="space-y-4">
             {issues.map((issue) => (
-              <Link key={issue.id} to={`/admin/issue/${issue.id}`}>
-                <IssueCard issue={issue} />
-              </Link>
+              <IssueCard 
+                key={issue.id} 
+                issue={issue}
+                onClick={(issue) => navigate(`/admin/issue/${issue.id}`)}
+              />
             ))}
           </div>
         )}

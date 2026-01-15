@@ -80,10 +80,8 @@ const ReportIssue = () => {
 
       await issueService.createIssue(issueData);
 
-      // Success - navigate to my issues page
-      navigate("/student/my-issues", { 
-        state: { message: "Issue reported successfully!" } 
-      });
+      // Success - navigate back to previous page
+      navigate(-1);
     } catch (err) {
       console.error("Error submitting issue:", err);
       const errorMessage = err.response?.data?.error || "Failed to submit issue. Please try again.";
@@ -239,7 +237,7 @@ const ReportIssue = () => {
             <div className="flex gap-4">
               <button
                 type="button"
-                onClick={() => navigate("/student/my-issues")}
+                onClick={() => navigate(-1)}
                 className="flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
                 disabled={loading}
               >

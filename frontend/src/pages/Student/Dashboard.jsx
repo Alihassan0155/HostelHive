@@ -10,6 +10,7 @@ import MiniStatsChart from "../../components/charts/MiniStatsChart";
 import RecentIssuesList from "./RecentIssuesList";
 import issueService from "../../services/issueService";
 import { useAuth } from "../../context/AuthContext";
+import { HostelNameDisplay } from "../../components/UI/NameDisplay";
 
 const statsVariant = {
   hidden: { opacity: 0, y: 8 },
@@ -63,7 +64,7 @@ const StudentDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-purple-100 p-6">
-      <Header title="Student Dashboard" />
+      <Header title="Student Dashboard" showBackButton={false} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <motion.div variants={statsVariant} initial="hidden" animate="show" custom={1}>
@@ -117,7 +118,7 @@ const StudentDashboard = () => {
           <Card>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold text-gray-800">Recent Activity</h2>
-              <div className="text-sm text-gray-500">Hostel: <span className="font-medium text-gray-700 ml-1">{userData?.hostelId || "—"}</span></div>
+              <HostelNameDisplay hostelId={userData?.hostelId} />
             </div>
             <RecentIssuesList issues={issues} />
           </Card>

@@ -1,6 +1,7 @@
 import express from "express";
 import { verifyToken } from "../middleware/auth.js";
 import { IssueService } from "../services/issueService.js";
+import { RatingService } from "../services/ratingService.js";
 import { USER_ROLES } from "../config/constants.js";
 
 const router = express.Router();
@@ -318,6 +319,48 @@ router.put("/:id/update", verifyToken(["worker"]), async (req, res) => {
     });
   } catch (error) {
     console.error("❌ Error adding worker update:", error);
+    res.status(500).json({
+      error: error.response?.data || error.message,
+    });
+  }
+});
+
+// 🏆 Submit Rating (Student Only)
+router.post("/:id/rating", verifyToken(["student"]), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { rating, feedback } = req.body;
+
+    if (!rating) {
+      return res.status(400).json({
+        error: "Rating is required",
+      });
+    }
+
+    const result = await RatingService.submitRating(id, rating, feedback || '', req.user.uid);
+
+    res.status(200).json({
+      message: "Rating submitted successfully ✅",
+      ...result,
+    });
+  } catch (error) {
+    console.error("❌ Error submitting rating:", error);
+    res.status(500).json({
+      error: error.response?.data || error.message,
+    });
+  }
+});
+
+// 🏆 Get Unrated Issues (Student Only)
+router.get("/unrated", verifyToken(["student"]), async (req, res) => {
+  try {
+    const unratedIssues = await RatingService.getUnratedIssues(req.user.uid);
+
+    res.status(200).json({
+      issues: unratedIssues,
+    });
+  } catch (error) {
+    console.error("❌ Error fetching unrated issues:", error);
     res.status(500).json({
       error: error.response?.data || error.message,
     });

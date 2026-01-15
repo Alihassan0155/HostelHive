@@ -22,8 +22,23 @@ export class NotificationService {
 
   static async createNotification(notificationData) {
     const notification = new Notification(notificationData);
-    const docRef = await db.collection(COLLECTIONS.NOTIFICATIONS).add(notification.toFirestore());
-    return { id: docRef.id, ...notification.toFirestore() };
+    const notificationPayload = notification.toFirestore();
+    
+    // Create notification in main notifications collection
+    const docRef = await db.collection(COLLECTIONS.NOTIFICATIONS).add(notificationPayload);
+    
+    // Also store in user's notifications subcollection: users/{userID}/notifications/{notificationID}
+    if (notificationData.userId) {
+      const userNotificationRef = db
+        .collection(COLLECTIONS.USERS)
+        .doc(notificationData.userId)
+        .collection('notifications')
+        .doc(docRef.id);
+      
+      await userNotificationRef.set(notificationPayload);
+    }
+    
+    return { id: docRef.id, ...notificationPayload };
   }
 
   static async markAsRead(notificationId) {

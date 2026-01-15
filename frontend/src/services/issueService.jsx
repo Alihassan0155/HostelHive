@@ -98,6 +98,31 @@ const issueService = {
       throw error;
     }
   },
+
+  // Submit rating for completed issue (Student only)
+  submitRating: async (issueId, rating, feedback = '') => {
+    try {
+      const response = await apiClient.post(`/issues/${issueId}/rating`, {
+        rating,
+        feedback,
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error submitting rating:', error);
+      throw error;
+    }
+  },
+
+  // Get unrated completed issues (Student only)
+  getUnratedIssues: async () => {
+    try {
+      const response = await apiClient.get('/issues/unrated');
+      return response.data.issues || [];
+    } catch (error) {
+      console.error('Error fetching unrated issues:', error);
+      throw error;
+    }
+  },
 };
 
 export { issueService };

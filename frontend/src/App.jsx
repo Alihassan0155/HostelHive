@@ -1,6 +1,8 @@
 // App.jsx
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { SocketProvider } from './context/SocketContext';
+import RatingManager from './components/Rating/RatingManager';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import StudentDashboard from './pages/Student/Dashboard';
@@ -15,13 +17,15 @@ import ManageWorkers from './pages/Admin/ManageWorkers';
 import WorkerDashboard from './pages/Worker/Dashboard';
 import MyTasks from './pages/Worker/MyTasks';
 import TaskDetails from './pages/Worker/TaskDetails';
+import IssueChat from './pages/Chat/IssueChat';
 import PrivateRoute from './context/ProtectedRoute';
 
 function App() {
   return (
     <Router>
       <AuthProvider>
-        <Routes>
+        <SocketProvider>
+          <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           
@@ -131,10 +135,22 @@ function App() {
             } 
           />
 
+          {/* Chat Routes */}
+          <Route 
+            path="/chat/issue/:id" 
+            element={
+              <PrivateRoute>
+                <IssueChat />
+              </PrivateRoute>
+            } 
+          />
+
           {/* Default redirect */}
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
+        <RatingManager />
+        </SocketProvider>
       </AuthProvider>
     </Router>
   );

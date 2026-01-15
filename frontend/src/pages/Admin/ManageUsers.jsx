@@ -7,6 +7,7 @@ import Loader from "../../components/UI/Loader";
 import adminService from "../../services/adminService";
 import { useAuth } from "../../context/AuthContext";
 import { X } from "lucide-react";
+import { HostelNameDisplay } from "../../components/UI/NameDisplay";
 
 const ManageUsers = () => {
   const { userData } = useAuth();
@@ -312,7 +313,7 @@ const ManageUsers = () => {
             </div>
             {userData?.hostelId && (
               <p className="text-sm text-gray-500 mt-2">
-                Showing users from: <span className="font-medium text-gray-700">{userData.hostelId}</span>
+                Showing users from: <span className="font-medium text-gray-700"><HostelNameDisplay hostelId={userData.hostelId} /></span>
               </p>
             )}
           </div>
@@ -347,7 +348,7 @@ const ManageUsers = () => {
                       <div className="text-sm text-gray-600 space-y-1">
                         <div>Email: <span className="font-medium text-gray-800">{user.email}</span></div>
                         {user.hostelId && (
-                          <div>Hostel: <span className="font-medium text-gray-800">{user.hostelId}</span></div>
+                          <div>Hostel: <span className="font-medium text-gray-800"><HostelNameDisplay hostelId={user.hostelId} /></span></div>
                         )}
                         {user.roomNumber && (
                           <div>Room: <span className="font-medium text-gray-800">{user.roomNumber}</span></div>
